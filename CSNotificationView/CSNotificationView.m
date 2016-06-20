@@ -105,25 +105,7 @@
     self = [super initWithFrame:CGRectZero];
     if (self) {
         
-        self.backgroundColor = [UIColor clearColor];
-        
-        //Blur view
-        {
-            
-            if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber_iOS_7_1) {
-                //Use native effects
-                self.blurView = [[CSNativeBlurView alloc] initWithFrame:CGRectZero];
-            } else {
-                //Use layer stealing
-                self.blurView = [[CSLayerStealingBlurView alloc] initWithFrame:CGRectZero];
-            }
-            
-            self.blurView.userInteractionEnabled = NO;
-            self.blurView.translatesAutoresizingMaskIntoConstraints = NO;
-            self.blurView.clipsToBounds = NO;
-            [self insertSubview:self.blurView atIndex:0];
-            
-        }
+        self.backgroundColor = [UIColor colorWithRed:245.0f / 255.0f green:166.0f / 255.0f blue:35.0f / 255.0f alpha:1.0f];
         
         //Parent view
         {
@@ -165,9 +147,8 @@
                 _textLabel.minimumScaleFactor = 0.6;
                 _textLabel.lineBreakMode = NSLineBreakByTruncatingTail;
                 
-                UIFontDescriptor* textLabelFontDescriptor = [UIFontDescriptor preferredFontDescriptorWithTextStyle:UIFontTextStyleBody];
-                _textLabel.font = [UIFont fontWithDescriptor:textLabelFontDescriptor size:17.0f];
-                _textLabel.adjustsFontSizeToFitWidth = YES;
+                _textLabel.textAlignment = NSTextAlignmentCenter;
+                _textLabel.font = [UIFont systemFontOfSize:13.0 weight:UIFontWeightRegular];
                 
                 [self addSubview:_textLabel];
             }
@@ -245,13 +226,6 @@
 {
     [self removeConstraints:self.constraints];
     
-    NSDictionary* bindings = @{@"blurView":self.blurView};
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[blurView]|"
-                                                                 options:0 metrics:nil views:bindings]];
-    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-(-1)-[blurView]-(-1)-|"
-                                                                 options:0 metrics:nil views:bindings]];
-
-    
     CGFloat symbolViewWidth = self.symbolView.tag != kCSNotificationViewEmptySymbolViewTag ?
                                 kCSNotificationViewSymbolViewSidelength : 0.0f;
     CGFloat symbolViewHeight = kCSNotificationViewSymbolViewSidelength;
@@ -261,7 +235,7 @@
           @"symbolViewHeight":[NSNumber numberWithFloat:symbolViewHeight]};
     
     [self addConstraints:[NSLayoutConstraint
-        constraintsWithVisualFormat:@"H:|-(4)-[_symbolView(symbolViewWidth)]-(5)-[_textLabel]-(10)-|"
+        constraintsWithVisualFormat:@"H:|-(5)-[_symbolView(symbolViewWidth)]-(5)-[_textLabel]-(10)-|"
                             options:0
                             metrics:metrics
                               views:NSDictionaryOfVariableBindings(_textLabel, _symbolView)]];
@@ -281,12 +255,12 @@
                          multiplier:1.0f constant:-3]];
     
     [self addConstraint:[NSLayoutConstraint
-        constraintWithItem:_textLabel
-                 attribute:NSLayoutAttributeCenterY
-                 relatedBy:NSLayoutRelationEqual
-                    toItem:_symbolView
-                 attribute:NSLayoutAttributeCenterY
-                multiplier:1.0f constant:0]];
+                         constraintWithItem:self
+                         attribute:NSLayoutAttributeBottom
+                         relatedBy:NSLayoutRelationEqual
+                         toItem:_textLabel
+                         attribute:NSLayoutAttributeBottom
+                         multiplier:1.0f constant:9.0f]];
     
     [super updateConstraints];
 }
