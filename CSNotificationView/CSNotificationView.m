@@ -378,7 +378,7 @@
 
     CGSize transformedSize = CGSizeApplyAffineTransform(viewController.view.frame.size, viewController.view.transform);
     CGRect displayFrame = CGRectMake(0, 0, fabs(transformedSize.width),
-                                     kCSNotificationViewHeight + topLayoutGuideLength);
+                                     (self.extended ? kCSNotificationViewExtendedHeight : kCSNotificationViewHeight) + topLayoutGuideLength);
     
     return displayFrame;
 }
@@ -394,9 +394,9 @@
     CGFloat topLayoutGuideLength = [self topLayoutGuideLengthCalculation];
 
     CGSize transformedSize = CGSizeApplyAffineTransform(viewController.view.frame.size, viewController.view.transform);
-    CGRect offscreenFrame = CGRectMake(0, -kCSNotificationViewHeight - topLayoutGuideLength,
+    CGRect offscreenFrame = CGRectMake(0, -(self.extended ? kCSNotificationViewExtendedHeight : kCSNotificationViewHeight) - topLayoutGuideLength,
                                        fabs(transformedSize.width),
-                                       kCSNotificationViewHeight + topLayoutGuideLength);
+                                       (self.extended ? kCSNotificationViewExtendedHeight : kCSNotificationViewHeight) + topLayoutGuideLength);
     
     return offscreenFrame;
 }

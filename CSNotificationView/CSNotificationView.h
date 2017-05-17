@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 static CGFloat const kCSNotificationViewHeight = 32.0f;
+static CGFloat const kCSNotificationViewExtendedHeight = 44.0f;
 static CGFloat const kCSNotificationViewSymbolViewSidelength = 44.0f;
 static NSTimeInterval const kCSNotificationViewDefaultShowDuration = 2.0;
 
@@ -26,6 +27,11 @@ typedef void(^CSVoidBlock)();
 + (void)showInViewController:(UIViewController*)viewController
              style:(CSNotificationViewStyle)style
            message:(NSString*)message;
+
++ (void)showInViewController:(UIViewController*)viewController
+                       style:(CSNotificationViewStyle)style
+                     message:(NSString*)message
+                    extended:(BOOL)isExtended;
 
 + (void)showInViewController:(UIViewController*)viewController
          tintColor:(UIColor*)tintColor
@@ -83,6 +89,9 @@ typedef void(^CSVoidBlock)();
 @property (readonly, nonatomic, getter = isShowing) BOOL visible;
 
 #pragma mark - visible properties
+
+//
+@property (nonatomic, assign) BOOL extended;
 
 /**
  * The image displayed as an icon on the left side of `textLabel`.
