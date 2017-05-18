@@ -246,21 +246,8 @@
                             metrics:metrics
                                 views:NSDictionaryOfVariableBindings(_symbolView)]];
     
-    [self addConstraint:[NSLayoutConstraint
-                constraintWithItem:_symbolView
-                         attribute:NSLayoutAttributeBottom
-                         relatedBy:NSLayoutRelationEqual
-                            toItem:self
-                         attribute:NSLayoutAttributeBottom
-                         multiplier:1.0f constant:-3]];
+    [_textLabel.centerYAnchor constraintEqualToAnchor:self.centerYAnchor].active = YES;
     
-    [self addConstraint:[NSLayoutConstraint
-                         constraintWithItem:self
-                         attribute:NSLayoutAttributeBottom
-                         relatedBy:NSLayoutRelationEqual
-                         toItem:_textLabel
-                         attribute:NSLayoutAttributeBottom
-                         multiplier:1.0f constant:9.0f]];
     
     [super updateConstraints];
 }
@@ -356,14 +343,7 @@
 //Workaround as there is a bug: sometimes, when accessing topLayoutGuide, it will render contentSize of UITableViewControllers to be {0, 0}
 - (CGFloat)topLayoutGuideLengthCalculation
 {
-    CGFloat top = MIN([UIApplication sharedApplication].statusBarFrame.size.height, [UIApplication sharedApplication].statusBarFrame.size.width);
-    
-    if (self.parentNavigationController && !self.parentNavigationController.navigationBarHidden) {
-        
-        top += CGRectGetHeight(self.parentNavigationController.navigationBar.frame);
-    }
-    
-    return top;
+    return CGRectGetHeight(self.parentNavigationController.navigationBar.frame) + CGRectGetMinY(self.parentNavigationController.navigationBar.frame);
 }
 
 - (CGRect)visibleFrame
@@ -377,8 +357,8 @@
     CGFloat topLayoutGuideLength = [self topLayoutGuideLengthCalculation];
 
     CGSize transformedSize = CGSizeApplyAffineTransform(viewController.view.frame.size, viewController.view.transform);
-    CGRect displayFrame = CGRectMake(0, 0, fabs(transformedSize.width),
-                                     (self.extended ? kCSNotificationViewExtendedHeight : kCSNotificationViewHeight) + topLayoutGuideLength);
+    CGRect displayFrame = CGRectMake(0, topLayoutGuideLength, fabs(transformedSize.width),
+                                     (self.extended ? kCSNotificationViewExtendedHeight : kCSNotificationViewHeight));
     
     return displayFrame;
 }
